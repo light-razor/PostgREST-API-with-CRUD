@@ -1,0 +1,31 @@
+1.
+docker-compose -f docker-compose.yaml up -d
+
+2.
+docker exec -it database-postgres psql -U postgres
+
+3.
+create table public.heroes (
+  id serial primary key,
+  name text not null
+);
+
+4.
+insert into public.heroes (name) values
+  ('Batman'), ('Superman');
+  
+5.
+CREATE ROLE web_anon NOLOGIN;
+
+6.
+GRANT USAGE ON SCHEMA public TO web_anon;
+
+7.
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT SELECT, INSERT, UPDATE, DELETE ON tables TO web_anon;
+
+8.
+curl -X GET http://localhost:3000/heroes
+
+9.
+curl -d '{"name":"Flash"}' -H "Content-Type: application/json" -X POST http://localhost:8000/heroes
